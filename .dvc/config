@@ -1,0 +1,4 @@
+[core]
+    remote = myremote-2
+['remote "myremote-2"']
+    url = C:\Users\Warlock\AppData\Local\Temp\dvc-demo

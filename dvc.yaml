@@ -1,0 +1,42 @@
+stages:
+  data_ingestion:
+    cmd: python -m vc_demo.data_ingestion
+    deps:
+      - vc_demo/data_ingestion.py
+    params:
+      - data_ingestion.test_size
+    outs:
+      - data/raw
+  data_preprocessing:
+    cmd: python -m vc_demo.data_preprocessing
+    deps:
+      - data/raw
+      - vc_demo/data_preprocessing.py
+    outs:
+      - data/interim
+  feature_engineering:
+    cmd: python -m vc_demo.feature_engineering
+    deps:
+      - data/interim
+      - vc_demo/feature_engineering.py
+    params:
+      - feature_engineering.max_features
+    outs:
+      - data/processed
+  model_building:
+    cmd: python -m vc_demo.modeling.model_building
+    deps:
+      - data/processed
+      - vc_demo/modeling/model_building.py
+    params:
+      - model_building.n_estimators
+      - model_building.learning_rate
+    outs:
+      - models/model.pkl
+  model_evaluation:
+    cmd: python -m vc_demo.modeling.model_evaluation
+    deps:
+      - models/model.pkl
+      - vc_demo/modeling/model_evaluation.py
+    metrics:
+      - reports/metrics.json
